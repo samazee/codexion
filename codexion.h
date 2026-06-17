@@ -15,12 +15,16 @@
 # include <string.h>
 
 typedef struct {
-	int	id;
-	int	state;
+	int			id;
+	int			state;
+	int			ncompiles;
+	pthread_t	thread;
 } t_coder;
 
 typedef struct {
-	int state;
+	int				id;
+	int 			state;
+	pthread_mutex_t	lock;
 } t_dongle;
 
 typedef struct {
@@ -37,6 +41,13 @@ typedef struct {
 	t_dongle	*dongles;
 } t_codexion;
 
-t_codexion *init_codexion(int argc, char **argv);
+typedef struct {
+	int			coder_id;
+	t_codexion	*codex;
+} t_workload;
+
+t_codexion	*init_codexion(int argc, char **argv);
+void		*coder_workload(void *arg);
+void		start_simulation(t_codexion *codex);
 
 #endif

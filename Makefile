@@ -1,7 +1,7 @@
 NAME = codexion
 SRCS = $(shell find . -name '*.c')
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -Wall -Wextra -Werror -I.
+CFLAGS = -Wall -Wextra -Werror -I. -pthread
 
 ifeq (run,$(firstword $(MAKECMDGOALS)))
   RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
