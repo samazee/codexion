@@ -16,7 +16,6 @@ int is_number(char *num)
 
 int validate_argv(int argc, char **argv)
 {
-	//printf("Number of args: %d\n", argc);
 	if (argc != 8)
 		return (printf("Insufficient arguments\n"), 0);
 	while (argc > 0)
@@ -30,57 +29,76 @@ int validate_argv(int argc, char **argv)
 	return (1);
 }
 
-int init_scheduler(t_codexion *codex, char *type, int cooldown, int burnout, int tcompile, int tdebug, int trefactor, int ncompiles)
+t_coder	*init_coder()
 {
-	int	i;
+	t_coder	*coder;
 
-	codex->scheduler = malloc(sizeof(t_scheduler));
-	codex->scheduler->dongles = malloc(codex->ncoders * sizeof(t_dongle));
-	codex->scheduler->conds = malloc(codex->ncoders * sizeof(pthread_cond_t));
-	codex->scheduler->thread = malloc(sizeof(pthread_t));
-	codex->scheduler->queue = malloc(sizeof(int) * codex->ncoders + 1);
-	codex->scheduler->ndongles = codex->ncoders;
-	if (!codex->scheduler || !codex->scheduler->dongles || !codex->scheduler->conds || !codex->scheduler->thread)
-		return (0);
-	codex->scheduler->type = type;
-	codex->scheduler->cooldown = cooldown;
-	codex->scheduler->burnout = burnout;
-	codex->scheduler->tcompile = tcompile;
-	codex->scheduler->tdebug = tdebug;
-	codex->scheduler->trefactor = trefactor;
-	codex->scheduler->ncompiles = ncompiles;
-	codex->scheduler->queue[0] = -1;
-	pthread_mutex_init(&codex->scheduler->queue_lock, NULL);
-	i = 0;
-	while (i < codex->ncoders)
-	{
-		(codex->scheduler->dongles + i)->state = FREE;
-		pthread_cond_init((codex->scheduler->conds + i), NULL);
-		(codex->scheduler->dongles + i)->lock = malloc(sizeof(pthread_mutex_t));
-		pthread_mutex_init((codex->scheduler->dongles + i)->lock, NULL);
-		(codex->scheduler->dongles + i++)->thread = malloc(sizeof(pthread_t));
-	}
-	return (1);
+	coder = malloc(sizeof(t_coder));
+	if (!coder)
+		return (NULL);
+	coder->thread = malloc(sizeof(pthread_t));
+	coder->last_compile = 0;
+	coder->ncompiles = 0;
+	return (coder);
 }
 
-int init_coders(t_codexion *codex)
+t_dongle	*init_dongle()
 {
-	codex->coders = malloc(codex->ncoders * sizeof(t_coder));
-	if (!codex->coders)
-		return (0);
-	return (1);
+	t_dongle			*dongle;
+    pthread_mutexattr_t attr;
+
+	pthread_mutexattr_init(&attr);
+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+	dongle = malloc(sizeof(t_dongle));
+	if (!dongle)
+		return (NULL);
+	dongle->state = FREE;
+	dongle->lock = malloc(sizeof(pthread_mutex_t));
+	dongle->thread = malloc(sizeof(pthread_t));
+	pthread_mutex_init(dongle->lock, &attr);
+	pthread_mutexattr_destroy(&attr);
+	return (dongle);
 }
 
 t_codexion	*init_codexion(int argc, char **argv)
 {
 	t_codexion	*codex;
+    pthread_mutexattr_t attr;
+	int i;
 
 	if (!validate_argv(argc, argv))
 		return (NULL);
 	codex = malloc(sizeof(t_codexion));
+	codex->type = argv[7];
+	codex->cooldown = atoi(argv[6]);
+	codex->burnout = atoi(argv[1]);
+	codex->tcompile = atoi(argv[2]);
+	codex->tdebug = atoi(argv[3]);
+	codex->trefactor = atoi(argv[4]);
+	codex->ncompiles = atoi(argv[5]);
 	codex->ncoders = atoi(argv[0]);
-	if (!init_coders(codex) || !init_scheduler(codex, argv[7], atoi(argv[6]), atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4]), atoi(argv[5])))
-		return (free(codex), NULL);
+	codex->dongles = malloc(sizeof(t_dongle*));
+	codex->coders = malloc(sizeof(t_coder*));
+	codex->conds = malloc(codex->ncoders * sizeof(pthread_cond_t));
+	codex->moniter = malloc(sizeof(pthread_t));
+	codex->queue = malloc(sizeof(int) * codex->ncoders + 1);
+	codex->ndongles = codex->ncoders;
+	codex->queue_lock = malloc(sizeof(pthread_mutex_t));
+	codex->output_lock = malloc(sizeof(pthread_mutex_t));
+	codex->queue[0] = -1;
+
+	pthread_mutexattr_init(&attr);
+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+	pthread_mutex_init(codex->queue_lock, &attr);
+	pthread_mutex_init(codex->output_lock, &attr);
+	i = 0;
+	while (i < codex->ncoders)
+	{
+		pthread_cond_init((codex->conds + i), NULL);
+		codex->dongles[i] = init_dongle();
+		codex->coders[i++] = init_coder();
+	}
+	pthread_mutexattr_destroy(&attr);
 	printf("Codexion initialized\n");
 	return (codex);
 }

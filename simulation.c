@@ -6,10 +6,12 @@ long	get_elapsed_time(struct timeval start, struct timeval end) {
 	return ((end.tv_usec - start.tv_usec) / 1000);
 }
 
-void ts_printf(const char *format, struct timeval *start, struct timeval *end, int coder_id)
+void codex_log(pthread_mutex_t *lock, const char *format, struct timeval *start, struct timeval *end, int coder_id)
 {
+	pthread_mutex_lock(lock);
 	gettimeofday(end, NULL);
 	printf(format, get_elapsed_time(*start, *end), coder_id);
+	pthread_mutex_unlock(lock);
 }
 
 void	*coder_workload(void *arg)
@@ -26,22 +28,22 @@ void	*coder_workload(void *arg)
 		return (NULL);
 	gettimeofday(&start, NULL);
 	i = 0;
-	while (i < workload->scheduler->ncompiles) {
-		dongles = request_dongles(workload->scheduler, workload->coder_id);
+	while (i < workload->codex->ncompiles) {
+		dongles = request_dongles(workload->codex, workload->coder_id);
 		if (!dongles) {
-			ts_printf("%ld %d has burned out\n", &start, &end, workload->coder_id + 1);
+			codex_log(workload->codex->output_lock, "%ld %d burned out\n", &start, &end, workload->coder_id + 1);
 			*exit_status = 0;
 			pthread_exit(exit_status);
 		}
-		ts_printf("%ld %d has taken a dongle\n", &start, &end, workload->coder_id + 1);
-		ts_printf("%ld %d has taken a dongle\n", &start, &end, workload->coder_id + 1);
-		ts_printf("%ld %d is compiling\n", &start, &end, workload->coder_id + 1);
-		usleep(workload->scheduler->tcompile * 1000);
-		release_dongles(workload->scheduler, workload->coder_id);
-		ts_printf("%ld %d is debugging\n", &start, &end, workload->coder_id + 1);
-		usleep(workload->scheduler->tdebug * 1000);
-		ts_printf("%ld %d is refactoring\n", &start, &end, workload->coder_id + 1);
-		usleep(workload->scheduler->trefactor * 1000);
+		//codex_log(workload->codex->output_lock, "%ld %d has taken a dongle\n", &start, &end, workload->coder_id + 1);
+		//codex_log(workload->codex->output_lock, "%ld %d has taken a dongle\n", &start, &end, workload->coder_id + 1);
+		//codex_log(workload->codex->output_lock, "%ld %d is compiling\n", &start, &end, workload->coder_id + 1);
+		usleep(workload->codex->tcompile * 1000);
+		release_dongles(workload->codex, workload->coder_id);
+		//codex_log(workload->codex->output_lock, "%ld %d is debugging\n", &start, &end, workload->coder_id + 1);
+		usleep(workload->codex->tdebug * 1000);
+		//codex_log(workload->codex->output_lock, "%ld %d is refactoring\n", &start, &end, workload->coder_id + 1);
+		usleep(workload->codex->trefactor * 1000);
 		i++;
 	}
 	*exit_status = 1;
@@ -55,19 +57,19 @@ void	start_simulation(t_codexion *codex)
 
 	i = 0;
 	
-	pthread_create(codex->scheduler->thread, NULL, start_scheduler, codex->scheduler);
+	pthread_create(codex->moniter, NULL, start_moniter, codex);
 	while (i < codex->ncoders)
 	{
 		workload = malloc(sizeof(t_workload));
 		if (!workload)
 			continue;
-		workload->scheduler = codex->scheduler;
+		workload->codex = codex;
 		workload->coder_id = i;
-		pthread_create(codex->coders + i++, NULL, coder_workload, workload);
+		pthread_create(codex->coders[i++]->thread, NULL, coder_workload, workload);
 	}
 	i = 0;
 	while (i < codex->ncoders)
 	{
-		pthread_join(codex->coders[i++], NULL);
+		pthread_join(*(codex->coders[i++]->thread), NULL);
 	}
 }

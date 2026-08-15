@@ -10,15 +10,28 @@
 # define BURNOUT 6
 # define TAKEN 7
 
+# define _DSTATE(state) ( \
+    ((state) >= 0 && (state) <= 7) ? \
+    ((const char *[]){ \
+        "COMPILE", "DEBUG", "REFACTOR", "COOLDOWN", \
+        "FREE", "IDLE", "BURNOUT", "TAKEN" \
+    })[state] : "UNKNOWN" \
+)
+
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
 # include <errno.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <stdarg.h>
 # include <string.h>
 
-typedef pthread_t t_coder;
+typedef struct {
+	pthread_t	*thread;
+	int			ncompiles;
+	int 		last_compile;
+} t_coder;
 
 typedef struct {
 	pthread_mutex_t *lock;
@@ -27,41 +40,40 @@ typedef struct {
 } t_dongle;
 
 typedef struct {
-	pthread_t		*thread;
+} t_scheduler;
+
+typedef struct {
+	pthread_t		*moniter;
+	int 			ncoders;
+	int 			ncompiles;
+	t_coder			**coders;
 	char			*type;
 	pthread_cond_t	*conds;
-	t_dongle		*dongles;
+	t_dongle		**dongles;
 	int				ndongles;
-	int				ncompiles;
 	int 			cooldown;
 	int 			burnout;
 	int 			tcompile;
 	int 			tdebug;
 	int 			trefactor;
 	int				*queue;
-	pthread_mutex_t	queue_lock;
-} t_scheduler;
-
-typedef struct {
-	int 		ncoders;
-	int 		ncompiles;
-	t_scheduler	*scheduler;
-	t_coder		*coders;
+	pthread_mutex_t	*queue_lock;
+	pthread_mutex_t *output_lock;
 } t_codexion;
 
 typedef struct {
 	int			coder_id;
-	t_scheduler *scheduler;
+	t_codexion	*codex;
 } t_workload;
 
 
 t_codexion	*init_codexion(int argc, char **argv);
 void		*coder_workload(void *arg);
 void		start_simulation(t_codexion *codex);
-t_dongle	*request_dongles(t_scheduler *scheduler, int coder_id);
-void		release_dongles(t_scheduler *scheduler, int coder_id);
+t_dongle	*request_dongles(t_codexion *codex, int coder_id);
+void		release_dongles(t_codexion *codex, int coder_id);
 long		get_elapsed_time(struct timeval start, struct timeval end);
 void		ts_printf(const char *format, struct timeval *start, struct timeval *end, int coder_id);
-void		*start_scheduler(void *arg);
+void		*start_moniter(void *arg);
 
 #endif
