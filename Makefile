@@ -2,7 +2,7 @@ NAME = codexion
 SRCS = $(shell find . -name '*.c')
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall -Wextra -Werror -I. -pthread
-CDEBUGFLAGS = -I. -pthread -fsanitize=address -g3 -O0
+CDEBUGFLAGS = -I. -pthread -fsanitize=address -g3 -o0 -fno-omit-frame-pointer
 
 ifeq (run,$(firstword $(MAKECMDGOALS)))
   RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -17,7 +17,7 @@ endif
 all: $(NAME)
 
 %.o: %.c 
-	@cc $(CFLAGS) -c $< -o $@
+	@cc $(CDEBUGFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
 	@cc $(CFLAGS) $(OBJS) -o $(NAME)
