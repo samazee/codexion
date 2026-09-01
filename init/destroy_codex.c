@@ -6,7 +6,7 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 17:49:04 by azgor             #+#    #+#             */
-/*   Updated: 2026/08/29 18:08:27 by azgor            ###   ########.fr       */
+/*   Updated: 2026/08/30 13:54:33 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	destroy_dongles(t_codexion *codex)
 void	destroy_codexion(t_codexion *codex)
 {
 	if (!codex)
-		return;
+		return ;
 	destroy_coders(codex);
 	destroy_dongles(codex);
 	pthread_mutex_destroy(&(codex->queue_lock));
@@ -62,4 +62,3 @@ void	destroy_codexion(t_codexion *codex)
 	free(codex->dongles);
 	free(codex);
 }
-

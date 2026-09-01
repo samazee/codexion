@@ -2,22 +2,11 @@ NAME = codexion
 SRCS = $(shell find . -name '*.c')
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall -Wextra -Werror -I. -pthread
-CDEBUGFLAGS = -I. -pthread -fsanitize=address -g3 -o0 -fno-omit-frame-pointer
-
-ifeq (run,$(firstword $(MAKECMDGOALS)))
-  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  $(eval $(RUN_ARGS):;@:)
-endif
-
-ifeq (debug,$(firstword $(MAKECMDGOALS)))
-  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  $(eval $(RUN_ARGS):;@:)
-endif
 
 all: $(NAME)
 
 %.o: %.c 
-	@cc $(CDEBUGFLAGS) -c $< -o $@
+	@cc $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
 	@cc $(CFLAGS) $(OBJS) -o $(NAME)
@@ -28,13 +17,6 @@ clean:
 fclean: clean
 	@rm -rf $(NAME)
 
-run: fclean all
-	./$(NAME) $(RUN_ARGS)
-
-debug: fclean $(OBJS)
-	@cc $(CDEBUGFLAGS) $(OBJS) -o $(NAME)
-	./$(NAME) $(RUN_ARGS)
-
 re: fclean all
 
-.PHONY: all clean fclean re run
+.PHONY: all clean fclean re

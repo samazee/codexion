@@ -6,13 +6,15 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 17:47:19 by azgor             #+#    #+#             */
-/*   Updated: 2026/08/29 18:11:52 by azgor            ###   ########.fr       */
+/*   Updated: 2026/08/30 16:23:47 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int is_number(char *num)
+#include "codexion.h"
+
+int	is_number(char *num)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < strlen(num))
@@ -25,22 +27,23 @@ int is_number(char *num)
 	return (1);
 }
 
-int validate_argv(int argc, char **argv)
+int	validate_argv(int argc, char **argv)
 {
 	if (argc != 8)
 		return (printf("Insufficient arguments\n"), 0);
 	while (argc > 0)
 	{
 		argc--;
-		if (argc!=7 && (atoi(argv[argc]) <= 0 || !is_number(argv[argc])))
+		if (argc != 7 && (atoi(argv[argc]) <= 0 || !is_number(argv[argc])))
 			return (printf("Invalid number argument\n"), 0);
-		if (argc==7 && (strcmp(argv[argc], "edf") != 0 && strcmp(argv[argc], "fifo") != 0))
+		if (argc == 7 && (strcmp(argv[argc], "edf") != 0
+				&& strcmp(argv[argc], "fifo") != 0))
 			return (printf("Only strategies allowed are 'edf' or 'fifo'\n"), 0);
 	}
 	return (1);
 }
 
-void	set_codex_config(t_codexion *codex, int argc, char **argv)
+void	set_codex_config(t_codexion *codex, char **argv)
 {
 	codex->type = argv[7];
 	codex->cooldown = atoi(argv[6]);

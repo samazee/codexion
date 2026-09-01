@@ -6,7 +6,7 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 17:48:25 by azgor             #+#    #+#             */
-/*   Updated: 2026/08/29 18:09:05 by azgor            ###   ########.fr       */
+/*   Updated: 2026/08/30 16:24:01 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static int	alloc_codex_arrays(t_codexion *codex)
 {
 	int	i;
 
-	codex->dongles = malloc(sizeof(t_dongle*) * codex->ncoders);
-	codex->coders = malloc(sizeof(t_coder*) * codex->ncoders);
+	codex->dongles = malloc(sizeof(t_dongle *) * codex->ncoders);
+	codex->coders = malloc(sizeof(t_coder *) * codex->ncoders);
 	codex->queue = malloc(sizeof(int) * codex->qsize);
 	if (!codex->dongles || !codex->coders || !codex->queue)
 		return (0);
@@ -76,7 +76,7 @@ t_codexion	*init_codexion(int argc, char **argv)
 	codex = malloc(sizeof(t_codexion));
 	if (!codex)
 		return (NULL);
-	set_codex_config(codex, argc, argv);
+	set_codex_config(codex, argv);
 	if (!alloc_codex_arrays(codex))
 	{
 		free(codex);

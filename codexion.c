@@ -1,12 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   codexion.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/30 16:12:33 by azgor             #+#    #+#             */
+/*   Updated: 2026/08/30 16:12:33 by azgor            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "codexion.h"
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_codexion	*codex;
 
 	codex = init_codexion(--argc, ++argv);
 	if (!codex)
-		return (printf("Usage: ./codexion <number_of_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <number_of_compiles_required> <dongle_cooldown> <scheduler>\n"), 1);
+		return (printf("Usage: ./codexion <number_of_coders> \
+<time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor>\
+<number_of_compiles_required> <dongle_cooldown> <scheduler>\n"), 1);
 	start_simulation(codex);
 	destroy_codexion(codex);
 }

@@ -6,13 +6,13 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 17:33:00 by azgor             #+#    #+#             */
-/*   Updated: 2026/08/29 17:46:20 by azgor            ###   ########.fr       */
+/*   Updated: 2026/08/30 13:58:18 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-t_dongle	*init_dongle()
+t_dongle	*init_dongle(void)
 {
 	t_dongle			*dongle;
 
@@ -25,7 +25,7 @@ t_dongle	*init_dongle()
 	return (dongle);
 }
 
-t_coder	*init_coder()
+t_coder	*init_coder(void)
 {
 	t_coder	*coder;
 
