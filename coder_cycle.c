@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   coder_cycle.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:49:50 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/01 19:04:30 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/05 13:26:58 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,13 @@ int	coder_cycle(t_codexion *codex, int coder_id,
 	t_coder	*coder;
 
 	coder = codex->coders[coder_id];
-	if (!request_dongles(codex, coder_id))
+	if (!request_dongles(codex, coder_id, start, end))
 	{
 		codex_log(codex, "%ld %d burned out\n",
 			get_elapsed_time(start, end), coder_id + 1);
 		coder->state = DEAD;
 		return (0);
 	}
-	codex_log(codex, "%ld %d is compiling\n",
-		get_elapsed_time(start, end), coder_id + 1);
 	usleep(codex->tcompile * 1000);
 	release_dongles(codex, coder_id);
 	coder->ncompiles++;

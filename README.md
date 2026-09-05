@@ -1,5 +1,4 @@
-```markdown
-*This project has been created as part of the 42 curriculum by <azgor>*
+*This project has been created as part of the 42 curriculum by azgor*
 
 # Codexion
 
@@ -19,7 +18,6 @@ To compile quantum code, a coder must simultaneously hold two USB dongles—the 
 To compile Codexion, run:
 ```bash
 make
-
 ```
 
 This produces the compiled binary `codexion` in the root directory.
@@ -86,6 +84,3 @@ Run the executable with the required arguments representing timing and simulatio
 * **Documentation & Formatting:** AI was used to help draft and structure this `README.md` file in compliance with the required specification.
 * **Code Review & Debugging Assistance:** AI was consulted to analyze log traces, verify deadlock-free properties of asymmetric lock acquisition routines, and validate timing precision for high-concurrency loops.
 
-```
-
-```

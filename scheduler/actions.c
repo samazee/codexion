@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:18:28 by azgor             #+#    #+#             */
-/*   Updated: 2026/08/30 16:21:00 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/05 13:28:29 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	wait_for_dongles(t_codexion *codex, int coder_id)
 	return (pthread_mutex_unlock(&(coder->cond_lock)), 1);
 }
 
-int	request_dongles(t_codexion *codex, int coder_id)
+int	request_dongles(t_codexion *codex, int coder_id,
+					struct timeval *start, struct timeval *end)
 {
 	t_coder			*coder;
 
@@ -63,6 +64,12 @@ int	request_dongles(t_codexion *codex, int coder_id)
 	pthread_mutex_unlock(&(coder->left->lock));
 	pthread_mutex_unlock(&(coder->right->lock));
 	pop_queue(codex, coder_id);
+	codex_log(codex, "%ld %d has taken dongle\n",
+		get_elapsed_time(start, end), coder_id + 1);
+	codex_log(codex, "%ld %d has taken dongle\n",
+		get_elapsed_time(start, end), coder_id + 1);
+	codex_log(codex, "%ld %d is compiling\n",
+		get_elapsed_time(start, end), coder_id + 1);
 	return (1);
 }
 

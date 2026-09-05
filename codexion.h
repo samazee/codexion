@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codexion.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:47:19 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/01 19:05:13 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/05 13:26:19 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ int			get_coder_queue_index(t_codexion *codex, int coder_id);
 void		queue_request(t_codexion *codex, int coder_id);
 void		pop_queue(t_codexion *codex, int coder_id);
 void		start_simulation(t_codexion *codex);
-int			request_dongles(t_codexion *codex, int coder_id);
+int			request_dongles(t_codexion *codex, int coder_id,
+				struct timeval *start, struct timeval *end);
 void		release_dongles(t_codexion *codex, int coder_id);
 void		cooldown_dongles(t_codexion *codex, int coder_id);
 int			wait_for_dongles(t_codexion *codex, int coder_id);

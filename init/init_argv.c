@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_argv.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 17:47:19 by azgor             #+#    #+#             */
-/*   Updated: 2026/08/30 16:23:47 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/05 13:09:42 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	validate_argv(int argc, char **argv)
 	while (argc > 0)
 	{
 		argc--;
-		if (argc != 7 && (atoi(argv[argc]) <= 0 || !is_number(argv[argc])))
+		if (argc != 7 && !is_number(argv[argc]))
 			return (printf("Invalid number argument\n"), 0);
 		if (argc == 7 && (strcmp(argv[argc], "edf") != 0
 				&& strcmp(argv[argc], "fifo") != 0))
