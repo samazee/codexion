@@ -6,7 +6,7 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 17:33:00 by azgor             #+#    #+#             */
-/*   Updated: 2026/08/30 13:58:18 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/09 19:11:42 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_dongle	*init_dongle(void)
 
 t_coder	*init_coder(void)
 {
-	t_coder	*coder;
+	t_coder			*coder;
 
 	coder = malloc(sizeof(t_coder));
 	if (!coder)

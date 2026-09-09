@@ -6,7 +6,7 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:06:02 by azgor             #+#    #+#             */
-/*   Updated: 2026/08/30 15:08:03 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/09 18:55:38 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,9 @@ int	is_dongles_free(t_codexion *codex, int coder_id)
 
 	coder = codex->coders[coder_id];
 	result = 0;
-	pthread_mutex_lock(&(coder->left->lock));
-	pthread_mutex_lock(&(coder->right->lock));
-	if (coder->left->state == FREE && coder->right->state == FREE)
+	if (coder->left->state == FREE && coder->right->state == FREE
+		&& coder->left != coder->right)
 		result = 1;
-	pthread_mutex_unlock(&(coder->left->lock));
-	pthread_mutex_unlock(&(coder->right->lock));
 	return (result);
 }
 

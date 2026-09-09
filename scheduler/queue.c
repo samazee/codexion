@@ -6,7 +6,7 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 14:51:45 by azgor             #+#    #+#             */
-/*   Updated: 2026/08/30 15:17:45 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/09 17:44:23 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,15 @@ int	get_coder_queue_index(t_codexion *codex, int coder_id)
 
 void	queue_request(t_codexion *codex, int coder_id)
 {
-	int				i;
-	struct timeval	tv;
+	int		i;
+	t_coder	*coder;		
 
 	i = 0;
+	coder = codex->coders[coder_id];
 	pthread_mutex_lock(&(codex->queue_lock));
 	while (i + 1 < codex->qsize && codex->queue[i] >= 0)
 		i++;
-	gettimeofday(&tv, NULL);
-	codex->coders[coder_id]->deadline = (tv.tv_sec * 1000L)
-		+ (tv.tv_usec / 1000) + codex->burnout;
+	coder->deadline = coder->last_compile + codex->burnout;
 	if (i + 1 < codex->qsize)
 	{
 		codex->queue[i] = coder_id;

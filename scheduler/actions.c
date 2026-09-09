@@ -6,7 +6,7 @@
 /*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:18:28 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/05 13:28:29 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/09 18:49:53 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	request_dongles(t_codexion *codex, int coder_id,
 					struct timeval *start, struct timeval *end)
 {
 	t_coder			*coder;
+	struct	timeval	tv;
 
 	coder = codex->coders[coder_id];
 	queue_request(codex, coder_id);
@@ -64,6 +65,8 @@ int	request_dongles(t_codexion *codex, int coder_id,
 	pthread_mutex_unlock(&(coder->left->lock));
 	pthread_mutex_unlock(&(coder->right->lock));
 	pop_queue(codex, coder_id);
+	gettimeofday(&tv, NULL);
+	coder->last_compile = (tv.tv_sec * 1000L) + (tv.tv_usec / 1000);
 	codex_log(codex, "%ld %d has taken dongle\n",
 		get_elapsed_time(start, end), coder_id + 1);
 	codex_log(codex, "%ld %d has taken dongle\n",

@@ -6,7 +6,7 @@
 /*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:47:19 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/05 13:26:19 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/09 17:41:42 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_dongle
 typedef struct s_coder
 {
 	int				ncompiles;
-	int				last_compile;
+	long			last_compile;
 	long			deadline;
 	int				state;
 	t_dongle		*left;

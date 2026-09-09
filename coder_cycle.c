@@ -6,7 +6,7 @@
 /*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:49:50 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/05 13:26:58 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/09 19:11:21 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ long	get_elapsed_time(struct timeval *start, struct timeval *end)
 {
 	gettimeofday(end, NULL);
 	if (end->tv_sec != start->tv_sec)
-		return ((((end->tv_sec - start->tv_sec) * 1000000)
-				+ end->tv_usec - start->tv_usec) / 1000);
+		return (((end->tv_sec - start->tv_sec) * 1000L)
+				+ (end->tv_usec - start->tv_usec) / 1000);
 	return ((end->tv_usec - start->tv_usec) / 1000);
 }
 
@@ -60,12 +60,15 @@ int	coder_cycle(t_codexion *codex, int coder_id,
 void	*coder_thread(void *arg)
 {
 	t_workload		*workload;
+	t_coder			*coder;
 	struct timeval	start;
 	struct timeval	end;
 	int				i;
 
 	workload = (t_workload *)arg;
 	gettimeofday(&start, NULL);
+	coder = workload->codex->coders[workload->coder_id];
+	coder->last_compile = (start.tv_sec * 1000L) + (start.tv_usec / 1000);
 	i = 0;
 	while (i < workload->codex->ncompiles && !is_burnout(workload->codex))
 	{
