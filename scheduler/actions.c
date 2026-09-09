@@ -6,7 +6,7 @@
 /*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:18:28 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/09 18:49:53 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/09 19:18:48 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	request_dongles(t_codexion *codex, int coder_id,
 					struct timeval *start, struct timeval *end)
 {
 	t_coder			*coder;
-	struct	timeval	tv;
+	struct timeval	tv;
 
 	coder = codex->coders[coder_id];
 	queue_request(codex, coder_id);

@@ -6,7 +6,7 @@
 /*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:49:50 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/09 19:11:21 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/09 19:18:14 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ long	get_elapsed_time(struct timeval *start, struct timeval *end)
 	gettimeofday(end, NULL);
 	if (end->tv_sec != start->tv_sec)
 		return (((end->tv_sec - start->tv_sec) * 1000L)
-				+ (end->tv_usec - start->tv_usec) / 1000);
+			+ (end->tv_usec - start->tv_usec) / 1000);
 	return ((end->tv_usec - start->tv_usec) / 1000);
 }
 
