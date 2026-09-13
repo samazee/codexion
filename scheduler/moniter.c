@@ -6,7 +6,7 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 14:54:59 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/13 16:34:18 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/13 20:16:53 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	is_burnout(t_codexion *codex)
 	long			now;
 
 	i = 0;
+	if (codex->burned_out >= 0)
+		return ;
 	gettimeofday(&tv, NULL);
 	now = (tv.tv_sec * 1000L) + (tv.tv_usec / 1000);
 	while (i < codex->ncoders)
@@ -68,7 +70,7 @@ void	*start_moniter(void *arg)
 	t_codexion	*codex;
 
 	codex = (t_codexion *)(arg);
-	while (!workloads_done(codex))
+	while (!workloads_done(codex) && codex->burned_out < 0)
 	{
 		if (strcmp(codex->type, "fifo") == 0)
 			fifo_scheduler(codex);

@@ -6,7 +6,7 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 16:12:33 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/13 12:43:06 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/13 19:20:11 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,5 @@ int	main(int argc, char **argv)
 <number_of_compiles_required> <dongle_cooldown> <scheduler>\n"), 1);
 	start_simulation(codex);
 	destroy_codexion(codex);
+	return (0);
 }

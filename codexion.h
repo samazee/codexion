@@ -6,7 +6,7 @@
 /*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:47:19 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/13 13:28:28 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/13 18:57:26 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void		cooldown_dongles(t_codexion *codex, int coder_id);
 int			wait_for_dongles(t_codexion *codex, int coder_id);
 void		*free_dongle(void *arg);
 void		*start_moniter(void *arg);
-int			is_burnout(t_codexion *codex);
+void		is_burnout(t_codexion *codex);
 int			workloads_done(t_codexion *codex);
 int			is_dongles_free(t_codexion *codex, int coder_id);
 int			is_coder_turn(t_codexion *codex, int coder_id);

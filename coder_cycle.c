@@ -6,7 +6,7 @@
 /*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:49:50 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/13 16:35:32 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/13 20:42:12 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	coder_sleep(t_codexion *codex, int coder_id, long dt)
 
 	gettimeofday(&tv, NULL);
 	wakeup = ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000) + dt / 1000);
-	if (is_burnout(codex) < 0 && wakeup < codex->coders[coder_id]->deadline)
+	if (codex->burned_out < 0 && wakeup < codex->coders[coder_id]->deadline)
 	{
 		usleep(dt);
 		return (1);
@@ -39,8 +39,8 @@ long	get_elapsed_time(struct timeval *start, struct timeval *end)
 void	codex_log(t_codexion *codex, const char *format,
 			long dt, int coder_id)
 {
-	if (is_burnout(codex) < 0
-		|| (is_burnout(codex) >= 0 && strcmp(format, BURNOUT_LOG) == 0))
+	if (codex->burned_out < 0
+		|| (codex->burned_out >= 0 && strcmp(format, BURNOUT_LOG) == 0))
 	{
 		pthread_mutex_lock(&(codex->output_lock));
 		printf(format, dt, coder_id);
@@ -55,7 +55,7 @@ int	coder_cycle(t_codexion *codex, int coder_id,
 
 	coder = codex->coders[coder_id];
 	if (!request_dongles(codex, coder_id, start, end))
-		return (0);
+		return (is_burnout(codex), 0);
 	coder_sleep(codex, coder_id, codex->tcompile * 1000);
 	release_dongles(codex, coder_id);
 	coder->ncompiles++;
@@ -83,13 +83,13 @@ void	*coder_thread(void *arg)
 	coder->deadline = coder->last_compile + workload->codex->burnout;
 	coder->state = WORKING;
 	i = 0;
-	while (i < workload->codex->ncompiles && is_burnout(workload->codex) < 0)
+	while (i < workload->codex->ncompiles && workload->codex->burned_out < 0)
 	{
 		if (!coder_cycle(workload->codex, workload->coder_id, &start, &end))
 			break ;
 		i++;
 	}
-	if (is_burnout(workload->codex) == workload->coder_id)
+	if (workload->codex->burned_out == workload->coder_id)
 		codex_log(workload->codex, BURNOUT_LOG,
 			get_elapsed_time(&start, &end), workload->coder_id + 1);
 	return (free(workload), NULL);
