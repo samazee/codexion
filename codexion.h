@@ -70,6 +70,7 @@ typedef struct s_codexion
 	int				trefactor;
 	int				qsize;
 	int				*queue;
+	int				burned_out;
 	pthread_mutex_t	queue_lock;
 	pthread_mutex_t	output_lock;
 	t_dongle		**dongles;

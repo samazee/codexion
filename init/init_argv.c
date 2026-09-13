@@ -57,4 +57,5 @@ void	set_codex_config(t_codexion *codex, char **argv)
 	codex->ndongles = codex->ncoders;
 	codex->qsize = codex->ncoders + 1;
 	codex->moniter = 0;
+	codex->burned_out = -1;
 }

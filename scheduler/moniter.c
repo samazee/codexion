@@ -12,7 +12,7 @@
 
 #include "codexion.h"
 
-int	is_burnout(t_codexion *codex)
+void	is_burnout(t_codexion *codex)
 {
 	int				i;
 	struct timeval	tv;
@@ -24,16 +24,15 @@ int	is_burnout(t_codexion *codex)
 	while (i < codex->ncoders)
 	{
 		if (codex->coders[i]->state == BURNED_OUT)
-			return (i);
+			codex->burned_out = i;
 		if (codex->coders[i]->deadline <= now
 			&& codex->coders[i]->state == WORKING)
 		{
 			codex->coders[i]->state = BURNED_OUT;
-			return (i);
+			codex->burned_out = i;
 		}
 		i++;
 	}
-	return (-1);
 }
 
 int	workloads_done(t_codexion *codex)
@@ -69,13 +68,14 @@ void	*start_moniter(void *arg)
 	t_codexion	*codex;
 
 	codex = (t_codexion *)(arg);
-	while (!workloads_done(codex) && is_burnout(codex) < 0)
+	while (!workloads_done(codex))
 	{
 		if (strcmp(codex->type, "fifo") == 0)
 			fifo_scheduler(codex);
 		if (strcmp(codex->type, "edf") == 0)
 			edf_scheduler(codex);
 		usleep(1000);
+		is_burnout(codex);
 	}
 	return (NULL);
 }

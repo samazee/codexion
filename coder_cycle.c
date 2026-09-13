@@ -14,8 +14,8 @@
 
 int	coder_sleep(t_codexion *codex, int coder_id, long dt)
 {
-	long wakeup;
-	struct timeval tv;
+	long			wakeup;
+	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	wakeup = ((tv.tv_sec * 1000L) + (tv.tv_usec / 1000) + dt / 1000);
