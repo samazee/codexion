@@ -6,7 +6,7 @@
 /*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:47:19 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/09 17:41:42 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/13 13:28:28 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,16 @@
 
 # define COOLDOWN 0
 # define FREE 1
-# define ALIVE 2
-# define DEAD 3
-# define TAKEN 4
+# define WORKING 2
+# define BURNED_OUT 3
+# define IDLE 4
+# define TAKEN 5
+
+# define TAKEN_LOG "%ld %d has taken dongle\n"
+# define COMPILE_LOG "%ld %d is compiling\n"
+# define REFACTOR_LOG "%ld %d is refactoring\n"
+# define DEBUG_LOG "%ld %d is debuging\n"
+# define BURNOUT_LOG "%ld %d burned out\n"
 
 # include <stdlib.h>
 # include <pthread.h>

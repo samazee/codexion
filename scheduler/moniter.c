@@ -6,7 +6,7 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 14:54:59 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/01 18:56:45 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/13 16:34:18 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,26 @@
 
 int	is_burnout(t_codexion *codex)
 {
-	int	i;
+	int				i;
+	struct timeval	tv;
+	long			now;
 
 	i = 0;
+	gettimeofday(&tv, NULL);
+	now = (tv.tv_sec * 1000L) + (tv.tv_usec / 1000);
 	while (i < codex->ncoders)
 	{
-		if (codex->coders[i]->state == DEAD)
-			return (1);
+		if (codex->coders[i]->state == BURNED_OUT)
+			return (i);
+		if (codex->coders[i]->deadline <= now
+			&& codex->coders[i]->state == WORKING)
+		{
+			codex->coders[i]->state = BURNED_OUT;
+			return (i);
+		}
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 int	workloads_done(t_codexion *codex)
@@ -35,7 +45,7 @@ int	workloads_done(t_codexion *codex)
 	i = 0;
 	while (i < codex->ncoders)
 	{
-		if (codex->coders[i]->state == ALIVE)
+		if (codex->coders[i]->state == WORKING)
 		{
 			tncompiles += codex->coders[i]->ncompiles;
 		}
@@ -59,7 +69,7 @@ void	*start_moniter(void *arg)
 	t_codexion	*codex;
 
 	codex = (t_codexion *)(arg);
-	while (!workloads_done(codex) && !is_burnout(codex))
+	while (!workloads_done(codex) && is_burnout(codex) < 0)
 	{
 		if (strcmp(codex->type, "fifo") == 0)
 			fifo_scheduler(codex);

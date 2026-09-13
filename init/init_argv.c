@@ -6,7 +6,7 @@
 /*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 17:47:19 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/05 13:09:42 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/13 16:45:49 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@ int	is_number(char *num)
 {
 	size_t	i;
 
+	if (strlen(num) == 0)
+		return (0);
 	i = 0;
 	while (i < strlen(num))
 	{
-		if (num[i] != ' ' && num[i] != '+'
-			&& num[i] != '-' && (num[i] < '0' || num[i] > '9'))
+		if (num[i] < '0' || num[i] > '9')
 			return (0);
 		i++;
 	}

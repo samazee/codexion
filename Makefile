@@ -1,7 +1,7 @@
 NAME = codexion
 SRCS = $(shell find . -name '*.c')
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -Wall -Wextra -Werror -I. -pthread
+CFLAGS = -fsanitize=address -g -Wall -Wextra -Werror -I. -pthread
 
 all: $(NAME)
 

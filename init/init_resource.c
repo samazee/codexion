@@ -6,7 +6,7 @@
 /*   By: azgor <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 17:33:00 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/09 19:11:42 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/13 13:06:49 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_coder	*init_coder(void)
 	coder->last_compile = 0;
 	coder->deadline = 0;
 	coder->ncompiles = 0;
-	coder->state = ALIVE;
+	coder->state = IDLE;
 	coder->thread = 0;
 	coder->cond = malloc(sizeof(pthread_cond_t));
 	pthread_cond_init(coder->cond, NULL);

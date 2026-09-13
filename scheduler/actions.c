@@ -6,7 +6,7 @@
 /*   By: azgor <azgor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/30 15:18:28 by azgor             #+#    #+#             */
-/*   Updated: 2026/09/09 19:18:48 by azgor            ###   ########.fr       */
+/*   Updated: 2026/09/13 13:29:22 by azgor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,12 @@ int	request_dongles(t_codexion *codex, int coder_id,
 	pop_queue(codex, coder_id);
 	gettimeofday(&tv, NULL);
 	coder->last_compile = (tv.tv_sec * 1000L) + (tv.tv_usec / 1000);
-	codex_log(codex, "%ld %d has taken dongle\n",
+	coder->deadline = coder->last_compile + codex->burnout;
+	codex_log(codex, TAKEN_LOG,
 		get_elapsed_time(start, end), coder_id + 1);
-	codex_log(codex, "%ld %d has taken dongle\n",
+	codex_log(codex, TAKEN_LOG,
 		get_elapsed_time(start, end), coder_id + 1);
-	codex_log(codex, "%ld %d is compiling\n",
+	codex_log(codex, COMPILE_LOG,
 		get_elapsed_time(start, end), coder_id + 1);
 	return (1);
 }
